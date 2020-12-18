@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
@@ -12,12 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Flutter Test Task',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple
-      ),
-      home: MyHomePage(title: 'Flutter Test Task')
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.deepPurple),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => MyHomePage(
+              title: 'Flutter Test Task',
+            ),
+        '/second': (context) => MySecondPage(),
+      },
     );
   }
 }
@@ -32,7 +37,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   Color defColor = Colors.yellow;
   Random random = Random();
 
@@ -53,24 +57,86 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.title)),
-        body: Container(
-          child: GestureDetector(
-            child: Container(
-              child: Text('Hey there!', style: Theme.of(context).textTheme.headline4),
-              alignment: Alignment(0.0, 0.0),
-              color: defColor,
-            ),
-            onTap: () {
-              colorRandom();
-              Toast.show("Clicked", context,
-                  duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-            },
-          ),
-        ));
+      appBar: AppBar(title: Text(widget.title)),
+      body: Center(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                flex: 10,
+                child: GestureDetector(
+                  child: Container(
+                    alignment: Alignment(0.0, 0.0),
+                    color: defColor,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Hey there!',
+                            style: Theme.of(context).textTheme.headline4,
+                            textAlign: TextAlign.center),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/second');
+                          },
+                          child: const Text('Show more',
+                              style: TextStyle(fontSize: 20)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    colorRandom();
+                    Toast.show("Clicked", context,
+                        duration: Toast.LENGTH_SHORT, gravity: Toast.TOP);
+                  },
+                ),
+              ),
+            ]),
+      ),
+    );
+  }
+}
+
+class MySecondPage extends StatefulWidget {
+  @override
+  _MySecondPageState createState() => _MySecondPageState();
+}
+
+class _MySecondPageState extends State<MySecondPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                  child: Container(
+                    alignment: Alignment(0.0, 0.0),
+                    color: Colors.lightGreen,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Have a nice day!',
+                            style: Theme.of(context).textTheme.headline4,
+                            textAlign: TextAlign.center),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/');
+                          },
+                          child: const Text('Go Back',
+                              style: TextStyle(fontSize: 20)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ]),
+      ),
+    );
   }
 }
